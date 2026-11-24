@@ -1,0 +1,20 @@
+@startuml
+title Wikipedia article structuring components
+skinparam componentStyle rectangle
+actor "Wikipedia editor" as Editor
+cloud "Wikimedia article source\n(proposed upstream integration)" as Wikimedia
+package "Article structuring product" {
+  component "Editorial review UI" as UI
+  component "Single article agent" as Agent
+  component "Schema and evidence validation" as Validation
+  database "ChromaDB\nLab 1.6 examples" as Chroma
+}
+cloud "Google Gemini API" as Gemini
+Editor --> UI : submits and reviews an article
+Wikimedia --> UI : supplies article text
+UI --> Agent : title and body (X)
+Agent --> Gemini : task, article, and optional examples
+Agent --> Chroma : nearest examples by content (Lab 1.6)
+Agent --> Validation : check JSON, evidence and coverage
+Agent --> UI : validated draft (y) or error
+@enduml

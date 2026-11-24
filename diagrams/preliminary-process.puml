@@ -1,0 +1,20 @@
+@startuml
+title Preliminary article structuring process
+skinparam handwritten true
+start
+:Receive article title and English text (X);
+:Clean and number paragraphs;
+:Classify the subject;
+if (Person or country?) then (yes)
+  :Select the corresponding infobox;
+endif
+:Identify entities and extract supported facts;
+:Group paragraphs into sections;
+:Assemble and validate the draft;
+if (Valid output?) then (yes)
+  :Return structured article (y) for editor review;
+else (no)
+  :Show validation error;
+endif
+stop
+@enduml

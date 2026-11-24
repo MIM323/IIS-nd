@@ -1,0 +1,29 @@
+@startuml
+title Single article structuring request
+actor Editor
+boundary "Review interface" as UI
+control "Article agent" as Agent
+database "ChromaDB" as Chroma
+participant "Google Gemini API" as Gemini
+control "Output validator" as Validator
+
+Editor -> UI : Submit title and article body (X)
+UI -> Agent : Structure article
+Agent -> Agent : Normalize and number paragraphs
+opt Lab 1.6 retrieval is enabled
+  Agent -> Chroma : Search using article embedding
+  Chroma --> Agent : 3 ranked examples
+end
+Agent -> Gemini : Run structured prompt
+Gemini --> Agent : Category, facts, entities, sections
+Agent -> Validator : Check template, grounding, and coverage
+alt Valid response
+  Validator --> Agent : Structured article data
+  Agent --> UI : Return y and preview
+  UI --> Editor : Present evidence and proposed structure
+else Invalid response
+  Validator --> Agent : Validation error
+  Agent --> UI : Report failed validation
+  UI --> Editor : Show error for review
+end
+@enduml
